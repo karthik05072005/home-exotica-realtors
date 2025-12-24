@@ -122,46 +122,83 @@ export function useAddLead() {
     mutationFn: async (lead: LeadInput) => {
       if (!user) throw new Error("Not authenticated");
 
-      const { data, error } = await supabase
-        .from("leads")
-        .insert({
-          user_id: user.id,
-          customer_name: lead.customer_name,
-          phone: lead.phone,
-          email: lead.email || null,
-          source: lead.source,
-          notes: lead.notes || null,
-          assigned_agent: lead.assigned_agent || null,
-          lead_priority: lead.lead_priority || "warm",
-          lead_type: lead.lead_type || "buyer",
-          alternate_phone: lead.alternate_phone || null,
-          address: lead.address || null,
-          city: lead.city || null,
-          occupation: lead.occupation || null,
-          company_name: lead.company_name || null,
-          property_type: lead.property_type || null,
-          purpose: lead.purpose || "buy",
-          budget_min: lead.budget_min || null,
-          budget_max: lead.budget_max || null,
-          preferred_locations: lead.preferred_locations || null,
-          bhk_requirement: lead.bhk_requirement || null,
-          carpet_area: lead.carpet_area || null,
-          furnishing: lead.furnishing || null,
-          parking_required: lead.parking_required || false,
-          floor_preference: lead.floor_preference || null,
-          facing: lead.facing || null,
-          ready_to_move: lead.ready_to_move !== false,
-          expected_possession_date: lead.expected_possession_date || null,
-          tenant_type: lead.tenant_type || null,
-          is_vegetarian: lead.is_vegetarian ?? null,
-          has_pets: lead.has_pets ?? null,
-          visit_date: lead.visit_date || null,
-          visit_time: lead.visit_time || null,
-          property_category: lead.property_category || null,
-          possession_from: lead.possession_from || null,
-        })
-        .select()
-        .single();
+      // Insert with dynamic column handling to avoid constraint issues
+      const insertData: any = {
+        user_id: user.id,
+        customer_name: lead.customer_name,
+        phone: lead.phone,
+        email: lead.email || null,
+        source: lead.source,
+        notes: lead.notes || null,
+        assigned_agent: lead.assigned_agent || null,
+        lead_priority: lead.lead_priority || "warm",
+        lead_type: lead.lead_type || "buyer",
+        alternate_phone: lead.alternate_phone || null,
+        address: lead.address || null,
+        city: lead.city || null,
+        occupation: lead.occupation || null,
+        company_name: lead.company_name || null,
+        property_type: lead.property_type || null,
+        purpose: lead.purpose || "buy",
+        budget_min: lead.budget_min || null,
+        budget_max: lead.budget_max || null,
+        preferred_locations: lead.preferred_locations || null,
+        bhk_requirement: lead.bhk_requirement || null,
+        carpet_area: lead.carpet_area || null,
+        furnishing: lead.furnishing || null,
+        parking_required: lead.parking_required || false,
+        floor_preference: lead.floor_preference || null,
+        facing: lead.facing || null,
+        ready_to_move: lead.ready_to_move !== false,
+        expected_possession_date: lead.expected_possession_date || null,
+        tenant_type: lead.tenant_type || null,
+        is_vegetarian: lead.is_vegetarian ?? null,
+        has_pets: lead.has_pets ?? null,
+        visit_date: lead.visit_date || null,
+        visit_time: lead.visit_time || null,
+        property_category: lead.property_category || null,
+        possession_from: lead.possession_from || null,
+      };
+      
+      // Try to insert with score if the constraint exists
+      try {
+        // First attempt: try with score=0 to satisfy the constraint
+        const { data, error } = await supabase
+          .from("leads")
+          .insert([{ ...insertData, score: 0 }])
+          .select()
+          .single();
+          
+        if (error) {
+          // If it's a schema error (score column doesn't exist), try without score
+          if (error.message.toLowerCase().includes('score') || error.message.toLowerCase().includes('schema')) {
+            const { data: dataWithoutScore, error: errorWithoutScore } = await supabase
+              .from("leads")
+              .insert([insertData])
+              .select()
+              .single();
+              
+            if (errorWithoutScore) throw errorWithoutScore;
+            return dataWithoutScore;
+          } else {
+            throw error;
+          }
+        }
+        return data;
+      } catch (error: any) {
+        // If first attempt fails due to schema issues, try without score
+        if (error.message && (error.message.toLowerCase().includes('score') || error.message.toLowerCase().includes('schema'))) {
+          const { data: dataWithoutScore, error: errorWithoutScore } = await supabase
+            .from("leads")
+            .insert([insertData])
+            .select()
+            .single();
+            
+          if (errorWithoutScore) throw errorWithoutScore;
+          return dataWithoutScore;
+        }
+        throw error;
+      }
 
       if (error) throw error;
       return data;
