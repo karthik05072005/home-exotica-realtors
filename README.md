@@ -1,73 +1,83 @@
-# Welcome to your Lovable project
+# Home Exotica Realtors - Real Estate CRM
 
-## Project info
+A comprehensive CRM application designed specifically for Home Exotica Realtors to manage property leads, clients, follow-ups, and transactions.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Features
 
-## How can I edit this code?
+- Lead Management: Track property inquiries and leads
+- Customer Management: Maintain client relationships
+- Follow-up Tracking: Schedule and manage follow-ups
+- Document Management: Store property documents and contracts
+- Invoice & Payment Tracking: Manage transactions
+- Real-time Dashboard: View key metrics and insights
 
-There are several ways of editing your application.
+## Setup Instructions
 
-**Use Lovable**
+1. **Clone the repository**
+   ```sh
+   git clone https://github.com/karthik05072005/home-exotica-realtors.git
+   cd home-exotica-realtors
+   ```
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+2. **Install dependencies**
+   ```sh
+   npm install
+   ```
 
-Changes made via Lovable will be committed automatically to this repo.
+3. **Set up Supabase**
+   - Sign up at [Supabase](https://supabase.com)
+   - Create a new project
+   - Get your Project URL and Public API keys from Project Settings > API
+   - Update `.env` file with your Supabase credentials:
+     ```
+     VITE_SUPABASE_PROJECT_ID="your-project-id"
+     VITE_SUPABASE_PUBLISHABLE_KEY="your-anon-key"
+     VITE_SUPABASE_URL="https://your-project-id.supabase.co"
+     ```
 
-**Use your preferred IDE**
+4. **Run the development server**
+   ```sh
+   npm run dev
+   ```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Supabase Configuration
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+For your new Supabase project (ID: nyplkvvgnsczwyafvfrx), you need to:
 
-Follow these steps:
+1. Go to your Supabase dashboard
+2. Navigate to Project Settings > API
+3. Copy the "Project URL" and "Public API Keys" > "anon" key
+4. Update the `.env` file with these values
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## Database Setup
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+The application uses the following tables:
+- `customers`: Store client information
+- `leads`: Track property inquiries
+- `follow_ups`: Manage follow-up activities
+- `invoices`: Track property transactions
+- `documents`: Store property documents
 
-# Step 3: Install the necessary dependencies.
-npm i
+## Deployment
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+Deploy to Vercel:
+1. Push code to GitHub
+2. Connect Vercel to your GitHub repository
+3. Deploy with the following build settings:
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+   - Root Directory: `/`
 
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
+## Technologies Used
 
 - Vite
 - TypeScript
 - React
-- shadcn-ui
+- Supabase
 - Tailwind CSS
+- shadcn/ui
+- Framer Motion
 
-## How can I deploy this project?
+## Support
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+For support, please contact the Home Exotica Realtors development team.
