@@ -1,13 +1,6 @@
 -- Supabase Setup for Home Exotica Realtors CRM
 
--- Enable Row Level Security (RLS)
-ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
-ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
-ALTER TABLE follow_ups ENABLE ROW LEVEL SECURITY;
-ALTER TABLE invoices ENABLE ROW LEVEL SECURITY;
-ALTER TABLE documents ENABLE ROW LEVEL SECURITY;
-
--- Create customers table
+-- Create customers table first
 CREATE TABLE IF NOT EXISTS customers (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
@@ -114,6 +107,13 @@ CREATE TABLE IF NOT EXISTS documents (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
+
+-- Enable Row Level Security (RLS) after creating tables
+ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
+ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
+ALTER TABLE follow_ups ENABLE ROW LEVEL SECURITY;
+ALTER TABLE invoices ENABLE ROW LEVEL SECURITY;
+ALTER TABLE documents ENABLE ROW LEVEL SECURITY;
 
 -- Create RLS policies for customers
 CREATE POLICY "Users can view their own customers" ON customers FOR SELECT USING (auth.uid() = user_id);
