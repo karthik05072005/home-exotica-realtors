@@ -170,8 +170,10 @@ export function useAddLead() {
           .single();
           
         if (error) {
-          // If it's a schema error (score column doesn't exist), try without score
-          if (error.message.toLowerCase().includes('score') || error.message.toLowerCase().includes('schema')) {
+          // Check for the specific constraint error
+          if (error.message.toLowerCase().includes('leeds_score_check') || 
+              error.message.toLowerCase().includes('score') || 
+              error.message.toLowerCase().includes('constraint')) {
             const { data: dataWithoutScore, error: errorWithoutScore } = await supabase
               .from("leads")
               .insert([insertData])
@@ -186,8 +188,12 @@ export function useAddLead() {
         }
         return data;
       } catch (error: any) {
-        // If first attempt fails due to schema issues, try without score
-        if (error.message && (error.message.toLowerCase().includes('score') || error.message.toLowerCase().includes('schema'))) {
+        // If the try block threw an error, check if it's score/constraint-related
+        if (error.message && 
+            (error.message.toLowerCase().includes('leeds_score_check') || 
+             error.message.toLowerCase().includes('score') || 
+             error.message.toLowerCase().includes('constraint') ||
+             error.message.toLowerCase().includes('schema'))) {
           const { data: dataWithoutScore, error: errorWithoutScore } = await supabase
             .from("leads")
             .insert([insertData])
@@ -198,10 +204,7 @@ export function useAddLead() {
           return dataWithoutScore;
         }
         throw error;
-      }
 
-      if (error) throw error;
-      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["leads"] });
