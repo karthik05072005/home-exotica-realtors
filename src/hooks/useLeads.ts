@@ -160,51 +160,15 @@ export function useAddLead() {
         possession_from: lead.possession_from || null,
       };
       
-      // Try to insert with score if the constraint exists
-      try {
-        // First attempt: try with score=0 to satisfy the constraint
-        const { data, error } = await supabase
-          .from("leads")
-          .insert([{ ...insertData, score: 0 }])
-          .select()
-          .single();
-          
-        if (error) {
-          // Check for the specific constraint error
-          if (error.message.toLowerCase().includes('leeds_score_check') || 
-              error.message.toLowerCase().includes('score') || 
-              error.message.toLowerCase().includes('constraint')) {
-            const { data: dataWithoutScore, error: errorWithoutScore } = await supabase
-              .from("leads")
-              .insert([insertData])
-              .select()
-              .single();
-              
-            if (errorWithoutScore) throw errorWithoutScore;
-            return dataWithoutScore;
-          } else {
-            throw error;
-          }
-        }
-        return data;
-      } catch (error: any) {
-        // If the try block threw an error, check if it's score/constraint-related
-        if (error.message && 
-            (error.message.toLowerCase().includes('leeds_score_check') || 
-             error.message.toLowerCase().includes('score') || 
-             error.message.toLowerCase().includes('constraint') ||
-             error.message.toLowerCase().includes('schema'))) {
-          const { data: dataWithoutScore, error: errorWithoutScore } = await supabase
-            .from("leads")
-            .insert([insertData])
-            .select()
-            .single();
-            
-          if (errorWithoutScore) throw errorWithoutScore;
-          return dataWithoutScore;
-        }
-        throw error;
-
+      // Insert without the score field to avoid constraint issues
+      const { data, error } = await supabase
+        .from("leads")
+        .insert([insertData])
+        .select()
+        .single();
+        
+      if (error) throw error;
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["leads"] });
