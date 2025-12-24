@@ -26,7 +26,6 @@ import { format, parseISO } from "date-fns";
 export default function Customers() {
   const { data: customers = [], isLoading } = useCustomers();
   const addCustomer = useAddCustomer();
-  const followUps = useCustomerFollowUps(showHistoryForCustomer);
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
@@ -333,45 +332,55 @@ export default function Customers() {
       </Sheet>
 
       {/* History Dialog */}
-      <Dialog 
-        open={!!showHistoryForCustomer} 
-        onOpenChange={() => setShowHistoryForCustomer(null)}
-      >
-        <DialogContent className="max-h-[80vh] overflow-y-auto max-w-md">
-          <DialogHeader>
-            <DialogTitle>Call & Follow-up History</DialogTitle>
-          </DialogHeader>
-          
-          {followUps.isLoading ? (
-            <div className="flex items-center justify-center py-4">
-              <Loader2 className="w-6 h-6 animate-spin text-primary" />
-            </div>
-          ) : followUps.data && followUps.data.length > 0 ? (
-            <div className="space-y-3 max-h-96 overflow-y-auto">
-              {followUps.data.map((followUp) => (
-                <div key={followUp.id} className="p-3 bg-muted rounded-lg">
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium capitalize">{followUp.follow_up_type}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {format(parseISO(followUp.created_at), "MMM dd, yyyy HH:mm")}
-                    </span>
-                  </div>
-                  <p className="text-sm mt-1">
-                    {followUp.notes || "No notes"}
-                  </p>
-                  <div className="text-xs text-muted-foreground mt-1">
-                    Status: <span className="capitalize">{followUp.status}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="py-4 text-center text-muted-foreground">
-              No follow-up history found
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+      {showHistoryForCustomer && (
+        <CustomerHistoryDialog 
+          customerId={showHistoryForCustomer} 
+          onClose={() => setShowHistoryForCustomer(null)}
+        />
+      )}
     </div>
+  );
+}
+
+function CustomerHistoryDialog({ customerId, onClose }: { customerId: string; onClose: () => void }) {
+  const followUps = useCustomerFollowUps(customerId);
+  
+  return (
+    <Dialog open={!!customerId} onOpenChange={onClose}>
+      <DialogContent className="max-h-[80vh] overflow-y-auto max-w-md">
+        <DialogHeader>
+          <DialogTitle>Call & Follow-up History</DialogTitle>
+        </DialogHeader>
+        
+        {followUps.isLoading ? (
+          <div className="flex items-center justify-center py-4">
+            <Loader2 className="w-6 h-6 animate-spin text-primary" />
+          </div>
+        ) : followUps.data && followUps.data.length > 0 ? (
+          <div className="space-y-3 max-h-96 overflow-y-auto">
+            {followUps.data.map((followUp) => (
+              <div key={followUp.id} className="p-3 bg-muted rounded-lg">
+                <div className="flex items-center justify-between">
+                  <span className="font-medium capitalize">{followUp.follow_up_type}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {format(parseISO(followUp.created_at), "MMM dd, yyyy HH:mm")}
+                  </span>
+                </div>
+                <p className="text-sm mt-1">
+                  {followUp.notes || "No notes"}
+                </p>
+                <div className="text-xs text-muted-foreground mt-1">
+                  Status: <span className="capitalize">{followUp.status}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="py-4 text-center text-muted-foreground">
+            No follow-up history found
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }
