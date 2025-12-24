@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 33% 98%;
+    --foreground: 220 20% 20%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 20%;
+
+    --primary: 174 72% 40%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 40 30% 94%;
+    --secondary-foreground: 220 20% 25%;
+
+    --muted: 40 20% 92%;
+    --muted-foreground: 220 10% 50%;
+
+    --accent: 174 60% 94%;
+    --accent-foreground: 174 72% 30%;
+
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 152 60% 45%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 55%;
+    --warning-foreground: 38 92% 20%;
+
+    --info: 210 80% 55%;
+    --info-foreground: 0 0% 100%;
+
+    --border: 40 20% 88%;
+    --input: 40 20% 88%;
+    --ring: 174 72% 40%;
+
+    --radius: 1rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Custom CRM tokens */
+    --lead-new: 210 80% 55%;
+    --lead-followup: 38 92% 55%;
+    --lead-converted: 152 60% 45%;
+    --lead-closed: 220 10% 60%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(174 72% 40%), hsl(174 72% 50%));
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%), hsl(40 30% 98%));
+    --gradient-hero: linear-gradient(135deg, hsl(174 72% 45%), hsl(180 60% 55%));
+
+    --shadow-soft: 0 2px 8px -2px hsl(220 20% 20% / 0.08);
+    --shadow-card: 0 4px 16px -4px hsl(220 20% 20% / 0.1);
+    --shadow-elevated: 0 8px 32px -8px hsl(220 20% 20% / 0.15);
+  }
+
+  .dark {
+    --background: 220 20% 10%;
+    --foreground: 40 20% 95%;
+
+    --card: 220 20% 14%;
+    --card-foreground: 40 20% 95%;
+
+    --popover: 220 20% 14%;
+    --popover-foreground: 40 20% 95%;
+
+    --primary: 174 72% 50%;
+    --primary-foreground: 220 20% 10%;
+
+    --secondary: 220 15% 20%;
+    --secondary-foreground: 40 20% 90%;
+
+    --muted: 220 15% 18%;
+    --muted-foreground: 220 10% 60%;
+
+    --accent: 174 40% 20%;
+    --accent-foreground: 174 72% 70%;
+
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 152 50% 40%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 80% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --info: 210 70% 50%;
+    --info-foreground: 0 0% 100%;
+
+    --border: 220 15% 22%;
+    --input: 220 15% 22%;
+    --ring: 174 72% 50%;
+
+    --lead-new: 210 70% 55%;
+    --lead-followup: 38 80% 55%;
+    --lead-converted: 152 50% 50%;
+    --lead-closed: 220 10% 50%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(174 72% 45%), hsl(174 72% 55%));
+    --gradient-card: linear-gradient(180deg, hsl(220 20% 14%), hsl(220 20% 16%));
+    --gradient-hero: linear-gradient(135deg, hsl(174 60% 40%), hsl(180 50% 45%));
+
+    --shadow-soft: 0 2px 8px -2px hsl(0 0% 0% / 0.3);
+    --shadow-card: 0 4px 16px -4px hsl(0 0% 0% / 0.4);
+    --shadow-elevated: 0 8px 32px -8px hsl(0 0% 0% / 0.5);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+}
+
+@layer utilities {
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+  .gradient-card {
+    background: var(--gradient-card);
+  }
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+  .tap-highlight-none {
+    -webkit-tap-highlight-color: transparent;
+  }
+}

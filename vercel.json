@@ -1,0 +1,13 @@
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "github": {
+    "enabled": true,
+    "autoJobCancelation": true
+  },
+  "name": "home-exotica-realtors"
+}
