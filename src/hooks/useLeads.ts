@@ -159,7 +159,6 @@ export function useAddLead() {
           visit_time: lead.visit_time || null,
           property_category: lead.property_category || null,
           possession_from: lead.possession_from || null,
-          score: 0, // Default score to satisfy the check constraint
         })
         .select()
         .single();
